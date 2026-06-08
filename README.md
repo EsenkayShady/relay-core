@@ -519,20 +519,6 @@ cargo doc --no-deps --open                 # browse generated API docs
 
 ---
 
-## What Comes Next
-
-This library is the shared core. Platform-specific crates implement the three traits:
-
-| Crate | Queue | Sink |
-|-------|-------|------|
-| `cnapp-agent-nats` | NATS subscription | NATS publish |
-| `cnapp-agent-grpc` | gRPC server stream | gRPC client stream |
-| `cnapp-agent-http` | HTTP long-poll | HTTP webhook |
-
-Each of those crates depends on `relay-core` and plugs in its own implementations.
-
----
-
 ## License
 
 Apache-2.0
