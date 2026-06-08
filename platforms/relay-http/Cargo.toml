@@ -1,0 +1,21 @@
+[package]
+name = "relay-http"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "HTTP platform integration for relay-core"
+
+[[bin]]
+name = "relay-http"
+path = "src/main.rs"
+
+[dependencies]
+relay-core = { path = "../../core" }
+tokio = { version = "1", features = ["full"] }
+async-trait = "0.1"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+reqwest = { version = "0.12", features = ["json"] }

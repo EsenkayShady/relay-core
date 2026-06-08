@@ -1,0 +1,39 @@
+[package]
+name = "relay-core"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Platform-agnostic agent orchestration library for distributed network scanning"
+keywords = ["agent", "orchestration", "distributed", "async", "networking"]
+categories = ["asynchronous", "command-line-utilities"]
+
+[dependencies]
+tokio = { version = "1.35", features = ["full"] }
+async-trait = "0.1.75"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+chrono = { version = "0.4", features = ["serde"] }
+thiserror = "1.0"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+[dev-dependencies]
+tokio-test = "0.4"
+
+[lib]
+name = "relay_core"
+path = "src/lib.rs"
+
+[[example]]
+name = "basic"
+path = "examples/basic.rs"
+
+[[example]]
+name = "with_hooks"
+path = "examples/with_hooks.rs"
+
+[[example]]
+name = "standalone"
+path = "examples/standalone.rs"

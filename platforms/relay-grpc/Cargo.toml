@@ -1,0 +1,27 @@
+[package]
+name = "relay-grpc"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "gRPC platform integration for relay-core"
+build = "build.rs"
+
+[[bin]]
+name = "relay-grpc"
+path = "src/main.rs"
+
+[dependencies]
+relay-core = { path = "../../core" }
+tokio = { version = "1", features = ["full"] }
+async-trait = "0.1"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+tonic = "0.11"
+prost = "0.12"
+prost-types = "0.12"
+
+[build-dependencies]
+tonic-build = "0.11"

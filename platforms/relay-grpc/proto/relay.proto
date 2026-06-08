@@ -1,0 +1,100 @@
+syntax = "proto3";
+
+package relay;
+
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+
+// ── Task service ──────────────────────────────────────────────────────────────
+
+service RelayAgent {
+    // Pull the next available task for this agent (blocks until available).
+    rpc GetNextTask(GetNextTaskRequest) returns (GetNextTaskResponse);
+    // Deliver a completed scan result.
+    rpc SubmitResult(SubmitResultRequest) returns (SubmitResultResponse);
+    // Send a liveness heartbeat.
+    rpc SendHeartbeat(HeartbeatRequest) returns (HeartbeatResponse);
+    // Acknowledge a task after result delivery.
+    rpc AckTask(AckTaskRequest) returns (AckTaskResponse);
+    // Negative-acknowledge a task (dead-letter / requeue).
+    rpc NackTask(NackTaskRequest) returns (NackTaskResponse);
+}
+
+// ── Messages ─────────────────────────────────────────────────────────────────
+
+message GetNextTaskRequest {
+    string api_key = 1;
+    string agent_id = 2;
+}
+
+message GetNextTaskResponse {
+    Task task = 1;
+}
+
+message Task {
+    string id = 1;
+    string target = 2;
+    string scan_type = 3;
+    google.protobuf.Struct params = 4;
+    uint32 priority = 5;
+    uint64 timeout_secs = 6;
+    string agent_selector = 7;
+    map<string, string> tags = 8;
+}
+
+message SubmitResultRequest {
+    string api_key = 1;
+    Result result = 2;
+}
+
+message SubmitResultResponse {
+    bool accepted = 1;
+}
+
+message Result {
+    string task_id = 1;
+    string agent_id = 2;
+    string status = 3;           // "Success" | "Failed" | "Timeout" | "Cancelled"
+    repeated Finding findings = 4;
+    uint64 duration_ms = 5;
+    google.protobuf.Timestamp executed_at = 6;
+    string error = 7;
+    map<string, string> metadata = 8;
+}
+
+message Finding {
+    string id = 1;
+    string title = 2;
+    string severity = 3;
+    google.protobuf.Struct data = 4;
+    repeated string references = 5;
+}
+
+message HeartbeatRequest {
+    string api_key = 1;
+    string agent_id = 2;
+    string status = 3;
+}
+
+message HeartbeatResponse {
+    bool ok = 1;
+}
+
+message AckTaskRequest {
+    string api_key = 1;
+    string task_id = 2;
+}
+
+message AckTaskResponse {
+    bool ok = 1;
+}
+
+message NackTaskRequest {
+    string api_key = 1;
+    string task_id = 2;
+    string reason = 3;
+}
+
+message NackTaskResponse {
+    bool ok = 1;
+}
